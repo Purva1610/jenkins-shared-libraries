@@ -1,6 +1,10 @@
-def call(String Project, String tag, String Username){
-  withCredentials([usernamePassword(credentialsId: 'DockerhubCred', passwordVariable:'DockerhubPass', usernameVariable:'DockerhubUsername')]){
-  sh "docker login -u ${DockerhubUsername}, ${DockerhubPass}"
-}
- sh "docker push ${Username}/${Project}:${tag}"
+def call(String Project, String tag, String Username) {
+    // 1. Secure Login
+    withCredentials([usernamePassword(credentialsId: 'DockerhubCred', passwordVariable:'DockerhubPass', usernameVariable:'DockerhubUsername')]) {
+        // Use a space, not a comma. Use --password-stdin for security.
+        sh "echo ${DockerhubPass} | docker login -u ${DockerhubUsername} --password-stdin"
+    }
+    
+    // 2. Push Image
+    sh "docker push ${Username}/${Project}:${tag}"
 }
