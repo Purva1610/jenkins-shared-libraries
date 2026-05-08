@@ -2,5 +2,5 @@ def call(String Project, String tag, String Username){
   withCredentials([usernamePassword(credentialsId: 'DockerhubCred', passwordVariable:'DockerhubPass', usernameVariable:'DockerhubUsername')]){
   sh "docker login -u ${DockerhubUsername}, ${DockerhubPass}"
 }
-sh "docker push ${Project},${tag}, ${Username}"
+ sh "docker push ${Username}/${Project}:${tag}"
 }
