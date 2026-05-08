@@ -1,10 +1,12 @@
-def call(String Project, String tag, String Username) {
+// vars/dockerPush.groovy (shared library function)
+def call(String project, String tag, String username) {
     // 1. Secure Login
-    withCredentials([usernamePassword(credentialsId: 'DockerhubCred', passwordVariable:'DockerhubPass', usernameVariable:'DockerhubUsername')]) {
-        // Use a space, not a comma. Use --password-stdin for security.
+    withCredentials([usernamePassword(credentialsId: 'DockerhubCred', 
+                                      passwordVariable:'DockerhubPass', 
+                                      usernameVariable:'DockerhubUsername')]) {
         sh "echo ${DockerhubPass} | docker login -u ${DockerhubUsername} --password-stdin"
     }
     
     // 2. Push Image
-    sh "docker push ${Username}/${Project}:${tag}"
+    sh "docker push ${username}/${project}:${tag}"
 }
